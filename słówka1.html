@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Nauka słówek</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Manrope:wght@400;600;700&display=swap');
+
+:root {
+    --bg-1: #f7f3ef;
+    --bg-2: #f0f5ff;
+    --ink: #1b1b1b;
+    --muted: #6a6a6a;
+    --card: #ffffff;
+    --accent: #6b7cff;
+    --accent-2: #9aa8ff;
+    --accent-3: #27b08a;
+    --shadow: 0 12px 30px rgba(0,0,0,0.08);
+    --action-width: 260px;
+}
+
+body[data-theme="dark"] {
+    --bg-1: #0f1218;
+    --bg-2: #161b24;
+    --ink: #f4f6fb;
+    --muted: #b8c0cc;
+    --card: #1b2230;
+    --accent: #8ea0ff;
+    --accent-2: #b2baff;
+    --accent-3: #3ccf9a;
+    --shadow: 0 18px 38px rgba(0,0,0,0.35);
+    background: #0f1218;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Manrope', sans-serif;
+    color: var(--ink);
+    background: #f7f2ea;
+    padding: 24px 16px 40px;
+    margin: 0;
+    text-align: center;
+}
+
+.app {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 34px;
+    margin: 8px 0 6px;
+    letter-spacing: 0.2px;
+}
+
+.subtitle {
+    margin: 0 0 22px;
+    color: var(--muted);
+    font-size: 16px;
+}
+
+.panel {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 18px;
+    padding: 16px;
+    margin: 14px auto;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(6px);
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
+}
+
+.menu-grid button {
+    width: 100%;
+}
+
+#buttons .menu-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
+#buttons .menu-grid .action-btn {
+    width: var(--action-width);
+    max-width: 80vw;
+}
+
+button {
+    font-size: 18px;
+    padding: 14px 18px;
+    margin: 6px;
+    border-radius: 14px;
+    cursor: pointer;
+    width: auto;
+    background-color: var(--card);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.06);
+    color: var(--ink);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    border-color: rgba(0,0,0,0.12);
+}
+
+.primary {
+    background: var(--card);
+    color: var(--ink);
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+.ghost {
+    background: transparent;
+    border: 1px dashed rgba(0,0,0,0.2);
+    color: var(--ink);
+    box-shadow: none;
+}
+
+body[data-theme="dark"] .ghost {
+    border-color: rgba(255,255,255,0.25);
+}
+
+.card {
+    background: #dbe8ff;
+    padding: 26px;
+    border-radius: 16px;
+    font-size: 20px;
+    margin: 12px auto;
+    width: fit-content;
+    max-width: 90%;
+    height: 84px;
+    min-height: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.14);
+    position: relative;
+    background-image:
+        linear-gradient(0deg, rgba(0,0,0,0.04), rgba(0,0,0,0.04)),
+        radial-gradient(1px 1px at 20% 30%, rgba(0,0,0,0.04), rgba(0,0,0,0) 60%),
+        radial-gradient(1px 1px at 70% 60%, rgba(0,0,0,0.04), rgba(0,0,0,0) 60%);
+}
+
+.card.small {
+    font-size: 20px;
+    height: 84px;
+    min-height: 84px;
+}
+
+.reveal {
+    animation: reveal 160ms ease;
+}
+
+@keyframes reveal {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal { animation: none; }
+}
+
+body[data-theme="dark"] .card {
+    background: #2b395a;
+    color: var(--ink);
+}
+
+body[data-lang="cn"] #answerChars {
+    font-size: 32px;
+    letter-spacing: 1px;
+}
+
+body[data-lang="cn"] #word.is-chars {
+    font-size: 32px;
+    letter-spacing: 1px;
+}
+
+.hidden { display: none !important; }
+
+input {
+    font-size: 18px;
+    padding: 12px 14px;
+    margin: 6px;
+    width: 100%;
+    max-width: 360px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: var(--card);
+    color: var(--ink);
+}
+
+#answerPinyin { color: var(--ink); font-size: 22px; }
+
+#topBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0 16px;
+    gap: 12px;
+}
+
+#themeToggle {
+    width: auto;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+#topBar button {
+    width: auto;
+    padding: 10px 14px;
+    font-size: 16px;
+    border-radius: 12px;
+}
+
+.action-btn {
+    width: var(--action-width);
+    max-width: 80vw;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 18px;
+}
+
+#counter {
+    background: #ffffff;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    color: var(--muted);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+body[data-theme="dark"] #counter {
+    background: #1b2230;
+    color: var(--muted);
+}
+
+.counter-bottom {
+    margin: 10px auto 0;
+    display: inline-block;
+}
+
+#wordList { margin-top: 8px; }
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.stack button {
+    width: var(--action-width);
+    max-width: 80vw;
+}
+
+.answer-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
+}
+
+body:not([data-lang="cn"]) .answer-row {
+    flex-direction: column;
+}
+
+body[data-lang="cn"] .answer-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: min(520px, 90%);
+}
+
+body[data-lang="cn"] .answer-row .card.small {
+    width: 240px;
+    max-width: 42vw;
+}
+
+.mark-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.mark-row .action-btn {
+    width: calc(var(--action-width) / 2 - 6px);
+    max-width: 42vw;
+}
+
+.active-flag {
+    border-color: rgba(0,0,0,0.25);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+body[data-theme="dark"] .active-flag {
+    border-color: rgba(255,255,255,0.35);
+}
+
+.learn-panel {
+    background: rgba(255,255,255,0.6);
+    border-radius: 18px;
+    padding: 14px 12px 8px;
+    margin: 10px auto 14px;
+    width: min(620px, 92vw);
+    min-height: 420px;
+    box-shadow: 0 14px 32px rgba(0,0,0,0.16);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+body[data-theme="dark"] .learn-panel {
+    background: rgba(27,34,48,0.7);
+}
+.word-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+    padding: 10px 14px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.delete-btn {
+    padding: 6px 10px;
+    font-size: 14px;
+    background: #ffe1e1;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+@media (max-width: 520px) {
+    h1 { font-size: 28px; }
+    .card { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+<h1>📚 Nauka słówek</h1>
+<div class="subtitle">Wybierz język, ucz się w swoim tempie i dodawaj własne słowa.</div>
+
+<div id="menu" class="panel">
+    <div class="menu-grid">
+        <button onclick="startLearning('it')">🇮🇹 Włoski</button>
+        <button onclick="startLearning('fr')">🇫🇷 Francuski</button>
+        <button onclick="startLearning('cn')">🇨🇳 Chiński</button>
+        <button onclick="startLearning('es')">🇪🇸 Hiszpański</button>
+        <button onclick="startLearning('de')">🇩🇪 Niemiecki</button>
+        <button onclick="startLearning('en')">🇬🇧 Angielski</button>
+    </div>
+    <div class="stack" style="margin-top: 10px;">
+        <button id="themeToggle" class="ghost" onclick="toggleTheme()">Tryb ciemny</button>
+    </div>
+</div>
+
+<div id="directionMenu" class="panel hidden">
+    <h3>Wybierz kierunek nauki:</h3>
+    <div class="menu-grid">
+        <button onclick="setDirection('pl-to-lang')">🇵🇱 → <span id="dirFlagTo">🇮🇹</span></button>
+        <button onclick="setDirection('lang-to-pl')"><span id="dirFlagFrom">🇮🇹</span> → 🇵🇱</button>
+    </div>
+</div>
+
+<div id="cnModeMenu" class="panel hidden">
+    <h3>Wybierz tryb nauki chińskiego:</h3>
+    <div class="menu-grid">
+        <button onclick="setCnMode('pl-to-cn')">🇵🇱 → Pinyin + 汉字</button>
+        <button onclick="setCnMode('pinyin-to-other')">Pinyin → 汉字 + 🇵🇱</button>
+        <button onclick="setCnMode('chars-to-other')">汉字 → Pinyin + 🇵🇱</button>
+    </div>
+</div>
+
+<div id="learning" class="hidden">
+
+    <!-- Top bar z przyciskiem powrotu i licznikiem -->
+    <div id="topBar">
+        <button class="ghost" onclick="backToMenu()">⬅ Wybierz język</button>
+        <button id="changeDirectionBtn" class="ghost hidden" onclick="changeDirection()">Zmień kierunek</button>
+        <button id="filterToggle" class="ghost" onclick="toggleFilter()">Widok: Wszystkie</button>
+    </div>
+
+    <div id="learnPanel" class="learn-panel hidden">
+        <div class="card hidden" id="word">Kliknij „Następne słowo”</div>
+        
+        <div class="answer-row">
+            <div class="card small hidden" id="answer"></div>
+            <div class="card small hidden" id="answerChars"></div>
+            <div class="card small hidden" id="answerPinyin"></div>
+        </div>
+        
+        <div id="buttons">
+            <div class="menu-grid">
+                <button id="showTrBtn" class="action-btn" onclick="showAnswer()">Pokaż tłumaczenie</button>
+                <button id="showCharsBtn" class="action-btn hidden" onclick="showChars()">Pokaż 汉字</button>
+                <button id="showPinyinBtn" class="action-btn hidden" onclick="showPinyin()">Pokaż pinyin</button>
+            </div>
+        </div>
+
+        <!-- Układ przycisków -->
+        <div class="stack">
+            <button id="nextWordBtn" class="primary action-btn hidden" onclick="nextWord()">Następne słowo</button>
+        </div>
+
+        <div class="mark-row">
+            <button id="markKnownBtn" class="action-btn" onclick="setKnown(true)">Znam</button>
+            <button id="markHardBtn" class="action-btn" onclick="setKnown(false)">Trudne</button>
+        </div>
+
+    </div>
+
+    <div id="counter" class="counter-bottom hidden"></div>
+
+    <div class="stack">
+        <button class="action-btn" onclick="showAddForm()">Dodaj słówko</button>
+        <button id="wordBaseBtn" class="action-btn" onclick="showWordBase()">Baza słów</button>
+    </div>
+    
+    <div id="addForm" class="panel hidden">
+        <h3>Dodaj nowe słówko</h3>
+        <input id="newPl" placeholder="Polski"><br>
+        <div id="cnFields" class="hidden">
+            <input id="newCnChars" placeholder="汉字"><br>
+            <input id="newCnPinyin" placeholder="Pinyin"><br>
+        </div>
+        <input id="newTr" placeholder="Tłumaczenie"><br>
+        <div class="menu-grid">
+            <button class="primary" onclick="addWord()">Zapisz</button>
+            <button class="ghost" onclick="hideAddForm()">Anuluj</button>
+        </div>
+    </div>
+
+    <!-- Sekcja Baza słów -->
+    <div id="wordBase" class="panel hidden">
+        <h3>Baza słówek</h3>
+        <div id="wordList"></div>
+        <button class="ghost" onclick="hideWordBase()">Powrót</button>
+    </div>
+
+</div>
+
+<script>
+const defaultWords = {
+    it: [{pl:"dom", tr:"casa"}, {pl:"kot", tr:"gatto"}, {pl:"woda", tr:"acqua"}],
+    fr: [
+        {pl:"abonament", tr:"abonnement"},
+        {pl:"akceptować", tr:"accepter"},
+        {pl:"wypadek", tr:"accident"},
+        {pl:"porozumienie", tr:"accord"},
+        {pl:"zgoda", tr:"accord"},
+        {pl:"kupować", tr:"acheter"},
+        {pl:"rachunek", tr:"addition"},
+        {pl:"przymiotnik", tr:"adjectif"},
+        {pl:"administracja", tr:"administration"},
+        {pl:"uwielbiać", tr:"adorer"},
+        {pl:"adres", tr:"adresse"},
+        {pl:"przysłówek", tr:"adverbe"},
+        {pl:"pomoc", tr:"aide"},
+        {pl:"pomagać", tr:"aider"},
+        {pl:"lubić, kochać", tr:"aimer"},
+        {pl:"czuć się źle", tr:"aller mal"},
+        {pl:"czuć się lepiej", tr:"aller mieux"},
+        {pl:"iść pieszo", tr:"aller à pied"},
+        {pl:"iść, jechać", tr:"aller"},
+        {pl:"mandat", tr:"amende"},
+        {pl:"przyjaciel", tr:"ami"},
+        {pl:"przyjaciółka", tr:"amie"},
+        {pl:"przyjaciele", tr:"amis"},
+        {pl:"miłość", tr:"amour"},
+        {pl:"angielski", tr:"anglais"},
+        {pl:"zwierzę", tr:"animal"},
+        {pl:"urodziny", tr:"anniversaire"},
+        {pl:"roczny", tr:"annuel"},
+        {pl:"odwoływać", tr:"annuler"},
+        {pl:"rok", tr:"année"},
+        {pl:"lata", tr:"ans"},
+        {pl:"mieszkanie", tr:"appartement"},
+        {pl:"telefon", tr:"appel"},
+        {pl:"aplikacja", tr:"application"},
+        {pl:"uczyć się", tr:"apprendre"},
+        {pl:"po", tr:"après"},
+        {pl:"popołudnie", tr:"après-midi"},
+        {pl:"drzewo", tr:"arbre"},
+        {pl:"pieniądze", tr:"argent"},
+        {pl:"szafa", tr:"armoire"},
+        {pl:"załatwiać", tr:"arranger"},
+        {pl:"przyjeżdżać", tr:"arriver"},
+        {pl:"przystanek", tr:"arrêt"},
+        {pl:"zatrzymywać, przestawać", tr:"arrêter"},
+        {pl:"sztuka", tr:"art"},
+        {pl:"winda", tr:"ascenseur"},
+        {pl:"dość", tr:"assez"},
+        {pl:"wystarczająco", tr:"assez"},
+        {pl:"talerz", tr:"assiette"},
+        {pl:"ubezpieczenie", tr:"assurance"},
+        {pl:"czekać", tr:"attendre"},
+        {pl:"do widzenia", tr:"au revoir"},
+        {pl:"hostel", tr:"auberge"},
+        {pl:"dzisiaj", tr:"aujourd’hui"},
+        {pl:"autor", tr:"auteur"},
+        {pl:"jesień", tr:"automne"},
+        {pl:"pozwolenie", tr:"autorisation"},
+        {pl:"przed", tr:"avant"},
+        {pl:"z", tr:"avec"},
+        {pl:"aleja", tr:"avenue"},
+        {pl:"samolot", tr:"avion"},
+        {pl:"opinia", tr:"avis"},
+        {pl:"adwokat", tr:"avocat"},
+        {pl:"awokado", tr:"avocat"},
+        {pl:"potrzebować", tr:"avoir besoin de"},
+        {pl:"być ciepło", tr:"avoir chaud"},
+        {pl:"mieć ochotę", tr:"avoir envie de"},
+        {pl:"być głodnym", tr:"avoir faim"},
+        {pl:"być zimno", tr:"avoir froid"},
+        {pl:"boleć (coś)", tr:"avoir mal à"},
+        {pl:"boleć", tr:"avoir mal"},
+        {pl:"bać się", tr:"avoir peur"},
+        {pl:"mieć rację", tr:"avoir raison"},
+        {pl:"być spragnionym", tr:"avoir soif"},
+        {pl:"nie mieć racji", tr:"avoir tort"},
+        {pl:"mieć", tr:"avoir"},
+        {pl:"lotnisko", tr:"aéroport"},
+        {pl:"bagaż", tr:"bagage"},
+        {pl:"banan", tr:"banane"},
+        {pl:"przedmieścia", tr:"banlieue"},
+        {pl:"bank", tr:"banque"},
+        {pl:"bar", tr:"bar"},
+        {pl:"adidasy", tr:"baskets"},
+        {pl:"ładny", tr:"beau"},
+        {pl:"bardzo, dużo", tr:"beaucoup"},
+        {pl:"dużo", tr:"beaucoup"},
+        {pl:"potrzeba", tr:"besoin"},
+        {pl:"biblioteka", tr:"bibliothèque"},
+        {pl:"oczywiście", tr:"bien sûr"},
+        {pl:"dobrze", tr:"bien"},
+        {pl:"wkrótce", tr:"bientôt"},
+        {pl:"bilet", tr:"billet"},
+        {pl:"biały", tr:"blanc"},
+        {pl:"rana", tr:"blessure"},
+        {pl:"niebieski", tr:"bleu"},
+        {pl:"pić", tr:"boire"},
+        {pl:"napój", tr:"boisson"},
+        {pl:"tani", tr:"bon marché"},
+        {pl:"dzień dobry", tr:"bonjour"},
+        {pl:"dobry wieczór", tr:"bonsoir"},
+        {pl:"kozaki", tr:"bottes"},
+        {pl:"usta", tr:"bouche"},
+        {pl:"rzeźnik", tr:"boucherie"},
+        {pl:"piekarnia", tr:"boulangerie"},
+        {pl:"ramię", tr:"bras"},
+        {pl:"głośny", tr:"bruyant"},
+        {pl:"biuro", tr:"bureau"},
+        {pl:"autobus", tr:"bus"},
+        {pl:"prezent", tr:"cadeau"},
+        {pl:"kawa", tr:"café"},
+        {pl:"kawiarnia", tr:"café"},
+        {pl:"zeszyt", tr:"cahier"},
+        {pl:"kasa", tr:"caisse"},
+        {pl:"kalendarz", tr:"calendrier"},
+        {pl:"spokojny", tr:"calme"},
+        {pl:"spokój", tr:"calme"},
+        {pl:"wieś", tr:"campagne"},
+        {pl:"kanapa", tr:"canapé"},
+        {pl:"stolica", tr:"capitale"},
+        {pl:"kariera", tr:"carrière"},
+        {pl:"karta bankowa", tr:"carte bancaire"},
+        {pl:"centrum handlowe", tr:"centre commercial"},
+        {pl:"centrum", tr:"centre"},
+        {pl:"centrum miasta", tr:"centre-ville"},
+        {pl:"krzesło", tr:"chaise"},
+        {pl:"pokój", tr:"chambre"},
+        {pl:"zmieniać", tr:"changer"},
+        {pl:"śpiewać", tr:"chanter"},
+        {pl:"kapelusz", tr:"chapeau"},
+        {pl:"każdego dnia", tr:"chaque jour"},
+        {pl:"kot", tr:"chat"},
+        {pl:"ciepło", tr:"chaud"},
+        {pl:"ciepły", tr:"chaud"},
+        {pl:"gorący", tr:"chaud"},
+        {pl:"ogrzewanie", tr:"chauffage"},
+        {pl:"skarpetki", tr:"chaussettes"},
+        {pl:"buty", tr:"chaussures"},
+        {pl:"szef", tr:"chef"},
+        {pl:"koszula", tr:"chemise"},
+        {pl:"drogi", tr:"cher"},
+        {pl:"szukać", tr:"chercher"},
+        {pl:"włosy", tr:"cheveux"},
+        {pl:"u (kogoś)", tr:"chez"},
+        {pl:"pies", tr:"chien"},
+        {pl:"czekolada", tr:"chocolat"},
+        {pl:"wybierać", tr:"choisir"},
+        {pl:"wybór", tr:"choix"},
+        {pl:"niebo", tr:"ciel"},
+        {pl:"pięć", tr:"cinq"},
+        {pl:"kino", tr:"cinéma"},
+        {pl:"jasny", tr:"clair"},
+        {pl:"jasny, zrozumiały", tr:"clair"},
+        {pl:"klasa", tr:"classe"},
+        {pl:"klawiatura", tr:"clavier"},
+        {pl:"klient", tr:"client"},
+        {pl:"klimat", tr:"climat"},
+        {pl:"klinika", tr:"clinique"},
+        {pl:"klikać", tr:"cliquer"},
+        {pl:"klucz", tr:"clé"},
+        {pl:"kolega z pracy", tr:"collègue"},
+        {pl:"współpracownik", tr:"collègue"},
+        {pl:"złość", tr:"colère"},
+        {pl:"ile", tr:"combien"},
+        {pl:"zamówienie", tr:"commande"},
+        {pl:"zamawiać", tr:"commander"},
+        {pl:"zaczynać", tr:"commencer"},
+        {pl:"jak", tr:"comment"},
+        {pl:"porównywać", tr:"comparer"},
+        {pl:"skomplikowany", tr:"compliqué"},
+        {pl:"rozumieć", tr:"comprendre"},
+        {pl:"konto", tr:"compte"},
+        {pl:"umiejętność", tr:"compétence"},
+        {pl:"koncert", tr:"concert"},
+        {pl:"zaufanie", tr:"confiance"},
+        {pl:"potwierdzać", tr:"confirmer"},
+        {pl:"konflikt", tr:"conflit"},
+        {pl:"wygodny", tr:"confortable"},
+        {pl:"urlop", tr:"congé"},
+        {pl:"znać", tr:"connaître"},
+        {pl:"połączenie", tr:"connexion"},
+        {pl:"zadowolony", tr:"content"},
+        {pl:"kontynuować", tr:"continuer"},
+        {pl:"umowa", tr:"contrat"},
+        {pl:"rozmowa", tr:"conversation"},
+        {pl:"chłopak", tr:"copain"},
+        {pl:"dziewczyna", tr:"copine"},
+        {pl:"ciało", tr:"corps"},
+        {pl:"kolor", tr:"couleur"},
+        {pl:"para", tr:"couple"},
+        {pl:"e-mail", tr:"courriel"},
+        {pl:"lekcja, kurs", tr:"cours"},
+        {pl:"nóż", tr:"couteau"},
+        {pl:"kosztować", tr:"coûter"},
+        {pl:"wierzyć", tr:"croire"},
+        {pl:"łyżka", tr:"cuillère"},
+        {pl:"kuchnia", tr:"cuisine"},
+        {pl:"gotować", tr:"cuisiner"},
+        {pl:"kultura", tr:"culture"},
+        {pl:"serce", tr:"cœur"},
+        {pl:"tańczyć", tr:"danser"},
+        {pl:"data", tr:"date"},
+        {pl:"nie ma za co", tr:"de rien"},
+        {pl:"jutro", tr:"demain"},
+        {pl:"wniosek", tr:"demande"},
+        {pl:"pytać", tr:"demander"},
+        {pl:"pytać, prosić", tr:"demander"},
+        {pl:"ząb", tr:"dent"},
+        {pl:"od (czasu)", tr:"depuis"},
+        {pl:"schodzić, zjeżdżać", tr:"descendre"},
+        {pl:"dwa", tr:"deux"},
+        {pl:"musieć", tr:"devoir"},
+        {pl:"zadanie domowe", tr:"devoir"},
+        {pl:"trudne", tr:"difficile"},
+        {pl:"trudny", tr:"difficile"},
+        {pl:"różny", tr:"différent"},
+        {pl:"mówić", tr:"dire"},
+        {pl:"mówić, powiedzieć", tr:"dire"},
+        {pl:"dyskusja", tr:"discussion"},
+        {pl:"dostępny", tr:"disponible"},
+        {pl:"dziesięć", tr:"dix"},
+        {pl:"lekarz", tr:"docteur"},
+        {pl:"dokument urzędowy", tr:"document officiel"},
+        {pl:"dokument", tr:"document"},
+        {pl:"więc", tr:"donc"},
+        {pl:"dawać", tr:"donner"},
+        {pl:"dane", tr:"données"},
+        {pl:"spać", tr:"dormir"},
+        {pl:"plecy", tr:"dos"},
+        {pl:"ból", tr:"douleur"},
+        {pl:"prawo pracy", tr:"droit du travail"},
+        {pl:"prawo", tr:"droit"},
+        {pl:"czas trwania", tr:"durée"},
+        {pl:"decydować", tr:"décider"},
+        {pl:"luźny", tr:"décontracté"},
+        {pl:"odkrywać", tr:"découvrir"},
+        {pl:"jeść obiad", tr:"déjeuner"},
+        {pl:"obiad", tr:"déjeuner"},
+        {pl:"już", tr:"déjà"},
+        {pl:"pyszny", tr:"délicieux"},
+        {pl:"niezgoda", tr:"désaccord"},
+        {pl:"nienawidzić", tr:"détester"},
+        {pl:"jeść kolację", tr:"dîner"},
+        {pl:"kolacja", tr:"dîner"},
+        {pl:"zgoda", tr:"d’accord"},
+        {pl:"woda", tr:"eau"},
+        {pl:"zatrudniać", tr:"embaucher"},
+        {pl:"plan zajęć", tr:"emploi du temps"},
+        {pl:"zatrudnienie", tr:"emploi"},
+        {pl:"autobusem", tr:"en bus"},
+        {pl:"pociągiem", tr:"en train"},
+        {pl:"w mieście", tr:"en ville"},
+        {pl:"samochodem", tr:"en voiture"},
+        {pl:"jeszcze", tr:"encore"},
+        {pl:"dziecko", tr:"enfant"},
+        {pl:"zdejmować", tr:"enlever"},
+        {pl:"nuda", tr:"ennui"},
+        {pl:"razem", tr:"ensemble"},
+        {pl:"słyszeć", tr:"entendre"},
+        {pl:"firma", tr:"entreprise"},
+        {pl:"wchodzić", tr:"entrer"},
+        {pl:"rozmowa (np. kwalifikacyjna)", tr:"entretien"},
+        {pl:"ochota", tr:"envie"},
+        {pl:"środowisko", tr:"environnement"},
+        {pl:"wysyłać", tr:"envoyer"},
+        {pl:"schody", tr:"escalier"},
+        {pl:"nadzieja", tr:"espoir"},
+        {pl:"mieć nadzieję", tr:"espérer"},
+        {pl:"przymierzanie", tr:"essayage"},
+        {pl:"próbować", tr:"essayer"},
+        {pl:"i", tr:"et"},
+        {pl:"egzamin", tr:"examen"},
+        {pl:"badać", tr:"examiner"},
+        {pl:"usprawiedliwiać", tr:"excuser"},
+        {pl:"przepraszam", tr:"excusez-moi"},
+        {pl:"ćwiczenie", tr:"exercice"},
+        {pl:"tłumaczyć", tr:"expliquer"},
+        {pl:"wyjaśniać", tr:"expliquer"},
+        {pl:"doświadczenie", tr:"expérience"},
+        {pl:"łatwe", tr:"facile"},
+        {pl:"łatwy", tr:"facile"},
+        {pl:"rachunek", tr:"facture"},
+        {pl:"ufać", tr:"faire confiance"},
+        {pl:"robić zakupy", tr:"faire du shopping"},
+        {pl:"uprawiać sport", tr:"faire du sport"},
+        {pl:"robić", tr:"faire"},
+        {pl:"trzeba", tr:"falloir"},
+        {pl:"rodzina", tr:"famille"},
+        {pl:"zmęczenie", tr:"fatigue"},
+        {pl:"zmęczony", tr:"fatigué"},
+        {pl:"fałszywy", tr:"faux"},
+        {pl:"kobieta", tr:"femme"},
+        {pl:"żona", tr:"femme"},
+        {pl:"okno", tr:"fenêtre"},
+        {pl:"zamykać", tr:"fermer"},
+        {pl:"festiwal", tr:"festival"},
+        {pl:"plik", tr:"fichier"},
+        {pl:"dumny", tr:"fier"},
+        {pl:"córka", tr:"fille"},
+        {pl:"film", tr:"film"},
+        {pl:"syn", tr:"fils"},
+        {pl:"kończyć", tr:"finir"},
+        {pl:"gorączka", tr:"fièvre"},
+        {pl:"kwiat", tr:"fleur"},
+        {pl:"działać", tr:"fonctionner"},
+        {pl:"ciemny", tr:"foncé"},
+        {pl:"piłka nożna", tr:"football"},
+        {pl:"formularz", tr:"formulaire"},
+        {pl:"las", tr:"forêt"},
+        {pl:"widelec", tr:"fourchette"},
+        {pl:"świeży", tr:"frais"},
+        {pl:"truskawka", tr:"fraise"},
+        {pl:"malina", tr:"framboise"},
+        {pl:"francuski", tr:"français"},
+        {pl:"zimno", tr:"froid"},
+        {pl:"zimny", tr:"froid"},
+        {pl:"ser", tr:"fromage"},
+        {pl:"brat", tr:"frère"},
+        {pl:"gratulować", tr:"féliciter"},
+        {pl:"święto", tr:"fête"},
+        {pl:"święto, impreza", tr:"fête"},
+        {pl:"wygrywać", tr:"gagner"},
+        {pl:"rękawiczki", tr:"gants"},
+        {pl:"gwarancja", tr:"garantie"},
+        {pl:"dworzec", tr:"gare"},
+        {pl:"ludzie", tr:"gens"},
+        {pl:"miły", tr:"gentil"},
+        {pl:"życzliwość", tr:"gentillesse"},
+        {pl:"gramatyka", tr:"grammaire"},
+        {pl:"duży, wysoki", tr:"grand"},
+        {pl:"dorastać", tr:"grandir"},
+        {pl:"darmowy", tr:"gratuit"},
+        {pl:"grypa", tr:"grippe"},
+        {pl:"szary", tr:"gris"},
+        {pl:"wyzdrowieć", tr:"guérir"},
+        {pl:"gimnastyka", tr:"gymnastique"},
+        {pl:"ciasto", tr:"gâteau"},
+        {pl:"zażenowany", tr:"gêné"},
+        {pl:"mieszkać", tr:"habiter"},
+        {pl:"nawyk", tr:"habitude"},
+        {pl:"zwyczaj", tr:"habitude"},
+        {pl:"nienawiść", tr:"haine"},
+        {pl:"tygodniowy", tr:"hebdomadaire"},
+        {pl:"godzina", tr:"heure"},
+        {pl:"szczęśliwy", tr:"heureux"},
+        {pl:"wczoraj", tr:"hier"},
+        {pl:"historia", tr:"histoire"},
+        {pl:"zima", tr:"hiver"},
+        {pl:"mężczyzna", tr:"homme"},
+        {pl:"godzina, termin", tr:"horaire"},
+        {pl:"godziny pracy", tr:"horaire"},
+        {pl:"plan, rozkład", tr:"horaire"},
+        {pl:"osiem", tr:"huit"},
+        {pl:"wilgotny", tr:"humide"},
+        {pl:"szpital", tr:"hôpital"},
+        {pl:"hotel", tr:"hôtel"},
+        {pl:"tutaj", tr:"ici"},
+        {pl:"jest ładna pogoda", tr:"il fait beau"},
+        {pl:"jest brzydka pogoda", tr:"il fait mauvais"},
+        {pl:"pada śnieg", tr:"il neige"},
+        {pl:"pada deszcz", tr:"il pleut"},
+        {pl:"wyobrażać sobie", tr:"imaginer"},
+        {pl:"budynek", tr:"immeuble"},
+        {pl:"niecierpliwy", tr:"impatient"},
+        {pl:"ważny", tr:"important"},
+        {pl:"niemożliwe", tr:"impossible"},
+        {pl:"drukować", tr:"imprimer"},
+        {pl:"podatek", tr:"impôt"},
+        {pl:"pielęgniarz", tr:"infirmier"},
+        {pl:"pielęgniarka", tr:"infirmière"},
+        {pl:"składnik", tr:"ingrédient"},
+        {pl:"zaniepokojony", tr:"inquiet"},
+        {pl:"instalować", tr:"installer"},
+        {pl:"zakaz", tr:"interdiction"},
+        {pl:"internet", tr:"internet"},
+        {pl:"interesujący", tr:"intéressant"},
+        {pl:"zainteresowanie", tr:"intérêt"},
+        {pl:"zaproszenie", tr:"invitation"},
+        {pl:"zapraszać", tr:"inviter"},
+        {pl:"włoski", tr:"italien"},
+        {pl:"nigdy", tr:"jamais"},
+        {pl:"noga", tr:"jambe"},
+        {pl:"szynka", tr:"jambon"},
+        {pl:"ogród", tr:"jardin"},
+        {pl:"żółty", tr:"jaune"},
+        {pl:"jestem", tr:"je suis"},
+        {pl:"gra", tr:"jeu"},
+        {pl:"radość", tr:"joie"},
+        {pl:"ładny", tr:"joli"},
+        {pl:"grać", tr:"jouer"},
+        {pl:"grać, bawić się", tr:"jouer"},
+        {pl:"dzień", tr:"jour"},
+        {pl:"spódnica", tr:"jupe"},
+        {pl:"aż do", tr:"jusqu’à"},
+        {pl:"sprawiedliwość", tr:"justice"},
+        {pl:"mam", tr:"j’ai"},
+        {pl:"jezioro", tr:"lac"},
+        {pl:"brzydki", tr:"laid"},
+        {pl:"mleko", tr:"lait"},
+        {pl:"język", tr:"langue"},
+        {pl:"czytanie", tr:"lecture"},
+        {pl:"wolne", tr:"lent"},
+        {pl:"wolny", tr:"lent"},
+        {pl:"wolny", tr:"libre"},
+        {pl:"zwalniać", tr:"licencier"},
+        {pl:"czytać", tr:"lire"},
+        {pl:"łóżko", tr:"lit"},
+        {pl:"spór", tr:"litige"},
+        {pl:"literatura", tr:"littérature"},
+        {pl:"dostawa", tr:"livraison"},
+        {pl:"książka", tr:"livre"},
+        {pl:"oprogramowanie", tr:"logiciel"},
+        {pl:"ustawa", tr:"loi"},
+        {pl:"daleko od", tr:"loin de"},
+        {pl:"daleko", tr:"loin"},
+        {pl:"hobby", tr:"loisir"},
+        {pl:"zajęcie, hobby", tr:"loisir"},
+        {pl:"światło", tr:"lumière"},
+        {pl:"tam", tr:"là-bas"},
+        {pl:"sklep", tr:"magasin"},
+        {pl:"ręka", tr:"main"},
+        {pl:"teraz", tr:"maintenant"},
+        {pl:"urząd miasta", tr:"mairie"},
+        {pl:"ale", tr:"mais"},
+        {pl:"dom", tr:"maison"},
+        {pl:"źle", tr:"mal"},
+        {pl:"chory", tr:"malade"},
+        {pl:"choroba", tr:"maladie"},
+        {pl:"jeść", tr:"manger"},
+        {pl:"płaszcz", tr:"manteau"},
+        {pl:"targ", tr:"marché"},
+        {pl:"mąż", tr:"mari"},
+        {pl:"brązowy", tr:"marron"},
+        {pl:"rano", tr:"matin"},
+        {pl:"miesięczny", tr:"mensuel"},
+        {pl:"menu", tr:"menu"},
+        {pl:"morze", tr:"mer"},
+        {pl:"dziękuję", tr:"merci"},
+        {pl:"wiadomość", tr:"message"},
+        {pl:"aktualizować", tr:"mettre à jour"},
+        {pl:"kłaść, zakładać", tr:"mettre"},
+        {pl:"zakładać", tr:"mettre"},
+        {pl:"mebel", tr:"meuble"},
+        {pl:"południe", tr:"midi"},
+        {pl:"minuta", tr:"minute"},
+        {pl:"moda", tr:"mode"},
+        {pl:"miesiąc", tr:"mois"},
+        {pl:"góra", tr:"montagne"},
+        {pl:"góry", tr:"montagne"},
+        {pl:"wchodzić, wjeżdżać", tr:"monter"},
+        {pl:"zabytek", tr:"monument"},
+        {pl:"hasło", tr:"mot de passe"},
+        {pl:"słowo", tr:"mot"},
+        {pl:"umierać", tr:"mourir"},
+        {pl:"muzyka", tr:"musique"},
+        {pl:"muzeum", tr:"musée"},
+        {pl:"matka", tr:"mère"},
+        {pl:"lekarz", tr:"médecin"},
+        {pl:"lek", tr:"médicament"},
+        {pl:"metro", tr:"métro"},
+        {pl:"natura", tr:"nature"},
+        {pl:"rodzić się", tr:"naître"},
+        {pl:"śnieg", tr:"neige"},
+        {pl:"dziewięć", tr:"neuf"},
+        {pl:"nowy", tr:"neuf"},
+        {pl:"nos", tr:"nez"},
+        {pl:"czarny", tr:"noir"},
+        {pl:"rzeczownik", tr:"nom"},
+        {pl:"nie", tr:"non"},
+        {pl:"ocena", tr:"note"},
+        {pl:"jedzenie", tr:"nourriture"},
+        {pl:"nowy", tr:"nouveau"},
+        {pl:"chmura", tr:"nuage"},
+        {pl:"noc", tr:"nuit"},
+        {pl:"numer", tr:"numéro"},
+        {pl:"cel", tr:"objectif"},
+        {pl:"obowiązek", tr:"obligation"},
+        {pl:"zajęty", tr:"occupé"},
+        {pl:"ptak", tr:"oiseau"},
+        {pl:"optymistyczny", tr:"optimiste"},
+        {pl:"komputer", tr:"ordinateur"},
+        {pl:"recepta", tr:"ordonnance"},
+        {pl:"ucho", tr:"oreille"},
+        {pl:"lub", tr:"ou"},
+        {pl:"zapominać", tr:"oublier"},
+        {pl:"tak", tr:"oui"},
+        {pl:"otwierać", tr:"ouvrir"},
+        {pl:"gdzie", tr:"où"},
+        {pl:"chleb", tr:"pain"},
+        {pl:"awaria", tr:"panne"},
+        {pl:"spodnie", tr:"pantalon"},
+        {pl:"park", tr:"parc"},
+        {pl:"ponieważ", tr:"parce que"},
+        {pl:"przepraszam", tr:"pardon"},
+        {pl:"rodzice", tr:"parents"},
+        {pl:"czasami", tr:"parfois"},
+        {pl:"rozmawiać z", tr:"parler avec"},
+        {pl:"mówić", tr:"parler"},
+        {pl:"dzielić", tr:"partager"},
+        {pl:"dzielić się", tr:"partager"},
+        {pl:"wyjeżdżać", tr:"partir"},
+        {pl:"brak zgody", tr:"pas d’accord"},
+        {pl:"paszport", tr:"passeport"},
+        {pl:"pasja", tr:"passion"},
+        {pl:"cierpliwy", tr:"patient"},
+        {pl:"przerwa", tr:"pause"},
+        {pl:"płacić gotówką", tr:"payer en espèces"},
+        {pl:"płacić kartą", tr:"payer par carte"},
+        {pl:"płacić", tr:"payer"},
+        {pl:"kraj", tr:"pays"},
+        {pl:"malarstwo", tr:"peinture"},
+        {pl:"podczas", tr:"pendant"},
+        {pl:"myśleć", tr:"penser"},
+        {pl:"gubić", tr:"perdre"},
+        {pl:"nikt", tr:"personne"},
+        {pl:"osoba", tr:"personne"},
+        {pl:"pesymistyczny", tr:"pessimiste"},
+        {pl:"śniadanie", tr:"petit déjeuner"},
+        {pl:"mały", tr:"petit"},
+        {pl:"mało", tr:"peu"},
+        {pl:"strach", tr:"peur"},
+        {pl:"być może", tr:"peut-être"},
+        {pl:"apteka", tr:"pharmacie"},
+        {pl:"zdjęcie", tr:"photo"},
+        {pl:"zdanie", tr:"phrase"},
+        {pl:"stopa", tr:"pied"},
+        {pl:"plac", tr:"place"},
+        {pl:"plaża", tr:"plage"},
+        {pl:"reklamacja", tr:"plainte"},
+        {pl:"skarga", tr:"plainte"},
+        {pl:"przyjemność", tr:"plaisir"},
+        {pl:"mapa", tr:"plan"},
+        {pl:"roślina", tr:"plante"},
+        {pl:"danie", tr:"plat"},
+        {pl:"deszcz", tr:"pluie"},
+        {pl:"ryba", tr:"poisson"},
+        {pl:"pieprz", tr:"poivre"},
+        {pl:"policja", tr:"police"},
+        {pl:"uprzejmość", tr:"politesse"},
+        {pl:"zanieczyszczenie", tr:"pollution"},
+        {pl:"polski", tr:"polonais"},
+        {pl:"ziemniak", tr:"pomme de terre"},
+        {pl:"jabłko", tr:"pomme"},
+        {pl:"most", tr:"pont"},
+        {pl:"telefon komórkowy", tr:"portable"},
+        {pl:"drzwi", tr:"porte"},
+        {pl:"nosić", tr:"porter"},
+        {pl:"zadać pytanie", tr:"poser une question"},
+        {pl:"możliwe", tr:"possible"},
+        {pl:"poczta", tr:"poste"},
+        {pl:"stanowisko", tr:"poste"},
+        {pl:"zupa", tr:"potage"},
+        {pl:"napiwek", tr:"pourboire"},
+        {pl:"dlaczego", tr:"pourquoi"},
+        {pl:"móc", tr:"pouvoir"},
+        {pl:"jeść śniadanie", tr:"prendre le petit déjeuner"},
+        {pl:"brać kąpiel", tr:"prendre un bain"},
+        {pl:"brać prysznic", tr:"prendre une douche"},
+        {pl:"brać", tr:"prendre"},
+        {pl:"presja", tr:"pression"},
+        {pl:"wiosna", tr:"printemps"},
+        {pl:"cena", tr:"prix"},
+        {pl:"problem", tr:"problème"},
+        {pl:"proces", tr:"procès"},
+        {pl:"nauczyciel", tr:"professeur"},
+        {pl:"postęp", tr:"progres"},
+        {pl:"projekt", tr:"projet"},
+        {pl:"promocja", tr:"promotion"},
+        {pl:"wymawiać", tr:"prononcer"},
+        {pl:"wymowa", tr:"prononciation"},
+        {pl:"proponować", tr:"proposer"},
+        {pl:"czysty", tr:"propre"},
+        {pl:"chronić", tr:"protéger"},
+        {pl:"blisko", tr:"près de"},
+        {pl:"blisko", tr:"près"},
+        {pl:"prefektura", tr:"préfecture"},
+        {pl:"preferować", tr:"préférer"},
+        {pl:"zapobiegać", tr:"prévenir"},
+        {pl:"sweter", tr:"pull"},
+        {pl:"ojciec", tr:"père"},
+        {pl:"jakość", tr:"qualité"},
+        {pl:"kiedy", tr:"quand"},
+        {pl:"ilość", tr:"quantité"},
+        {pl:"dzielnica", tr:"quartier"},
+        {pl:"cztery", tr:"quatre"},
+        {pl:"jaki, który", tr:"quel"},
+        {pl:"coś", tr:"quelque chose"},
+        {pl:"czasami", tr:"quelquefois"},
+        {pl:"ktoś", tr:"quelqu’un"},
+        {pl:"pytanie", tr:"question"},
+        {pl:"wychodzić z domu", tr:"quitter la maison"},
+        {pl:"codzienny", tr:"quotidien"},
+        {pl:"opowiadać", tr:"raconter"},
+        {pl:"winogrono", tr:"raisin"},
+        {pl:"szybki", tr:"rapide"},
+        {pl:"szybkie", tr:"rapide"},
+        {pl:"rzadko", tr:"rarement"},
+        {pl:"przepis", tr:"recette"},
+        {pl:"otrzymywać", tr:"recevoir"},
+        {pl:"odmawiać", tr:"refuser"},
+        {pl:"oglądać telewizję", tr:"regarder la télévision"},
+        {pl:"oglądać", tr:"regarder"},
+        {pl:"dziękować", tr:"remercier"},
+        {pl:"spotykać", tr:"rencontrer"},
+        {pl:"spotkanie, wizyta", tr:"rendez-vous"},
+        {pl:"wizyta", tr:"rendez-vous"},
+        {pl:"wracać do domu", tr:"rentrer à la maison"},
+        {pl:"posiłek", tr:"repas"},
+        {pl:"odpoczynek", tr:"repos"},
+        {pl:"szanować", tr:"respecter"},
+        {pl:"odpowiedzialność", tr:"responsabilité"},
+        {pl:"restauracja", tr:"restaurant"},
+        {pl:"zostawać", tr:"rester"},
+        {pl:"powrót", tr:"retour"},
+        {pl:"zwrot", tr:"retour"},
+        {pl:"wracać", tr:"revenir"},
+        {pl:"paragon", tr:"reçu"},
+        {pl:"przeziębienie", tr:"rhume"},
+        {pl:"nic", tr:"rien"},
+        {pl:"rzeka", tr:"rivière"},
+        {pl:"sukienka", tr:"robe"},
+        {pl:"różowy", tr:"rose"},
+        {pl:"czerwony", tr:"rouge"},
+        {pl:"droga", tr:"route"},
+        {pl:"rutyna", tr:"routine"},
+        {pl:"ulica", tr:"rue"},
+        {pl:"rytm", tr:"rythme"},
+        {pl:"zasada", tr:"règle"},
+        {pl:"zniżka", tr:"réduction"},
+        {pl:"naprawiać", tr:"réparer"},
+        {pl:"odpowiadać", tr:"répondre"},
+        {pl:"odpowiedź", tr:"réponse"},
+        {pl:"powtarzać", tr:"répéter"},
+        {pl:"portal społecznościowy", tr:"réseau social"},
+        {pl:"sieć", tr:"réseau"},
+        {pl:"rezerwować", tr:"réserver"},
+        {pl:"rezultat", tr:"résultat"},
+        {pl:"spotkanie", tr:"réunion"},
+        {pl:"udać się", tr:"réussir"},
+        {pl:"udać się, odnieść sukces", tr:"réussir"},
+        {pl:"zdać, odnieść sukces", tr:"réussir"},
+        {pl:"powtarzać", tr:"réviser"},
+        {pl:"pora roku", tr:"saison"},
+        {pl:"sałatka", tr:"salade"},
+        {pl:"pensja", tr:"salaire"},
+        {pl:"wynagrodzenie", tr:"salaire"},
+        {pl:"brudny", tr:"sale"},
+        {pl:"łazienka", tr:"salle de bain"},
+        {pl:"salon", tr:"salon"},
+        {pl:"cześć", tr:"salut"},
+        {pl:"słony", tr:"salé"},
+        {pl:"kanapka", tr:"sandwich"},
+        {pl:"bez", tr:"sans"},
+        {pl:"zdrowie", tr:"santé"},
+        {pl:"usatysfakcjonowany", tr:"satisfait"},
+        {pl:"wiedzieć", tr:"savoir"},
+        {pl:"wiedzieć, umieć", tr:"savoir"},
+        {pl:"skanować", tr:"scanner"},
+        {pl:"myć zęby", tr:"se brosser les dents"},
+        {pl:"koncentrować się", tr:"se concentrer"},
+        {pl:"kłaść się spać", tr:"se coucher"},
+        {pl:"relaksować się", tr:"se détendre"},
+        {pl:"myć się", tr:"se laver"},
+        {pl:"wstawać", tr:"se lever"},
+        {pl:"malować się", tr:"se maquiller"},
+        {pl:"pobrać się", tr:"se marier"},
+        {pl:"zgubić się", tr:"se perdre"},
+        {pl:"spacerować", tr:"se promener"},
+        {pl:"spotykać się", tr:"se rencontrer"},
+        {pl:"odpoczywać", tr:"se reposer"},
+        {pl:"spotkać się", tr:"se retrouver"},
+        {pl:"budzić się", tr:"se réveiller"},
+        {pl:"leczyć się", tr:"se soigner"},
+        {pl:"pamiętać", tr:"se souvenir"},
+        {pl:"mylić się", tr:"se tromper"},
+        {pl:"suchy", tr:"sec"},
+        {pl:"sekunda", tr:"seconde"},
+        {pl:"sól", tr:"sel"},
+        {pl:"tydzień", tr:"semaine"},
+        {pl:"podobny", tr:"semblable"},
+        {pl:"uczucie", tr:"sentiment"},
+        {pl:"siedem", tr:"sept"},
+        {pl:"kelner", tr:"serveur"},
+        {pl:"kelnerka", tr:"serveuse"},
+        {pl:"usługa", tr:"service"},
+        {pl:"usługa, przysługa", tr:"service"},
+        {pl:"jeśli", tr:"si"},
+        {pl:"podpis", tr:"signature"},
+        {pl:"prosty", tr:"simple"},
+        {pl:"strona internetowa", tr:"site"},
+        {pl:"sześć", tr:"six"},
+        {pl:"wieczór", tr:"soir"},
+        {pl:"wieczór, impreza", tr:"soirée"},
+        {pl:"wyprzedaż", tr:"solde"},
+        {pl:"słońce", tr:"soleil"},
+        {pl:"rozwiązanie", tr:"solution"},
+        {pl:"wychodzić", tr:"sortir"},
+        {pl:"życzyć", tr:"souhaiter"},
+        {pl:"zupa", tr:"soupe"},
+        {pl:"jeść kolację", tr:"souper"},
+        {pl:"mysz", tr:"souris"},
+        {pl:"pamiątka", tr:"souvenir"},
+        {pl:"często", tr:"souvent"},
+        {pl:"spektakl", tr:"spectacle"},
+        {pl:"sport", tr:"sport"},
+        {pl:"stres", tr:"stress"},
+        {pl:"styl", tr:"style"},
+        {pl:"długopis", tr:"stylo"},
+        {pl:"sukces", tr:"succès"},
+        {pl:"cukier", tr:"sucre"},
+        {pl:"słodki", tr:"sucré"},
+        {pl:"supermarket", tr:"supermarché"},
+        {pl:"znosić", tr:"supporter"},
+        {pl:"znosić, wspierać", tr:"supporter"},
+        {pl:"zaskoczenie", tr:"surprise"},
+        {pl:"miły", tr:"sympa"},
+        {pl:"bezpieczeństwo", tr:"sécurité"},
+        {pl:"pobyt", tr:"séjour"},
+        {pl:"serial", tr:"série"},
+        {pl:"siostra", tr:"sœur"},
+        {pl:"bawić się", tr:"s’amuser"},
+        {pl:"nazywać się", tr:"s’appeler"},
+        {pl:"zatrzymywać się", tr:"s’arrêter"},
+        {pl:"zasypiać", tr:"s’endormir"},
+        {pl:"przepraszać", tr:"s’excuser"},
+        {pl:"ubierać się", tr:"s’habiller"},
+        {pl:"proszę", tr:"s’il vous plaît"},
+        {pl:"t-shirt", tr:"t-shirt"},
+        {pl:"stół", tr:"table"},
+        {pl:"tablet", tr:"tablette"},
+        {pl:"rozmiar", tr:"taille"},
+        {pl:"późno", tr:"tard"},
+        {pl:"taksówka", tr:"taxi"},
+        {pl:"technologia", tr:"technologie"},
+        {pl:"czas wolny", tr:"temps libre"},
+        {pl:"niepełny etat", tr:"temps partiel"},
+        {pl:"pełny etat", tr:"temps plein"},
+        {pl:"czas", tr:"temps"},
+        {pl:"czas; pogoda", tr:"temps"},
+        {pl:"pogoda", tr:"temps"},
+        {pl:"temperatura", tr:"température"},
+        {pl:"tenis", tr:"tennis"},
+        {pl:"kończyć", tr:"terminer"},
+        {pl:"herbata", tr:"thé"},
+        {pl:"teatr", tr:"théâtre"},
+        {pl:"paragon", tr:"ticket"},
+        {pl:"nieśmiały", tr:"timide"},
+        {pl:"toaleta", tr:"toilettes"},
+        {pl:"pomidor", tr:"tomate"},
+        {pl:"zawsze", tr:"toujours"},
+        {pl:"turystyka", tr:"tourisme"},
+        {pl:"skręcać", tr:"tourner"},
+        {pl:"codziennie", tr:"tous les jours"},
+        {pl:"wszystko", tr:"tout"},
+        {pl:"kaszel", tr:"toux"},
+        {pl:"tradycja", tr:"tradition"},
+        {pl:"pociąg", tr:"train"},
+        {pl:"leczenie", tr:"traitement"},
+        {pl:"praca", tr:"travail"},
+        {pl:"pracować", tr:"travailler"},
+        {pl:"przechodzić", tr:"traverser"},
+        {pl:"sąd", tr:"tribunal"},
+        {pl:"smutny", tr:"triste"},
+        {pl:"smutek", tr:"tristesse"},
+        {pl:"trzy", tr:"trois"},
+        {pl:"za bardzo", tr:"trop"},
+        {pl:"uważać, znajdować", tr:"trouver"},
+        {pl:"znajdować", tr:"trouver"},
+        {pl:"bardzo", tr:"très"},
+        {pl:"pobierać", tr:"télécharger"},
+        {pl:"dzwonić", tr:"téléphoner"},
+        {pl:"telewizor", tr:"télévision"},
+        {pl:"głowa", tr:"tête"},
+        {pl:"wcześnie", tr:"tôt"},
+        {pl:"trochę", tr:"un peu"},
+        {pl:"jeden", tr:"un"},
+        {pl:"uniwersytet", tr:"université"},
+        {pl:"nagła sytuacja", tr:"urgence"},
+        {pl:"nagły przypadek", tr:"urgence"},
+        {pl:"nagły wypadek", tr:"urgence"},
+        {pl:"pilny", tr:"urgent"},
+        {pl:"używać", tr:"utiliser"},
+        {pl:"wakacje", tr:"vacances"},
+        {pl:"walizka", tr:"valise"},
+        {pl:"sprzedawać", tr:"vendre"},
+        {pl:"przychodzić", tr:"venir"},
+        {pl:"wiatr", tr:"vent"},
+        {pl:"czasownik", tr:"verbe"},
+        {pl:"szklanka", tr:"verre"},
+        {pl:"zielony", tr:"vert"},
+        {pl:"kurtka", tr:"veste"},
+        {pl:"mięso", tr:"viande"},
+        {pl:"życie prywatne", tr:"vie privée"},
+        {pl:"życie zawodowe", tr:"vie professionnelle"},
+        {pl:"stary", tr:"vieux"},
+        {pl:"miasto", tr:"ville"},
+        {pl:"wino", tr:"vin"},
+        {pl:"twarz", tr:"visage"},
+        {pl:"odwiedzać", tr:"visiter"},
+        {pl:"zwiedzać", tr:"visiter"},
+        {pl:"żyć", tr:"vivre"},
+        {pl:"sąsiad", tr:"voisin"},
+        {pl:"sąsiadka", tr:"voisine"},
+        {pl:"samochód", tr:"voiture"},
+        {pl:"chcieć", tr:"vouloir"},
+        {pl:"podróż", tr:"voyage"},
+        {pl:"podróżować", tr:"voyager"},
+        {pl:"prawdziwy", tr:"vrai"},
+        {pl:"rower", tr:"vélo"},
+        {pl:"ubranie", tr:"vêtement"},
+        {pl:"ubrania", tr:"vêtements"},
+        {pl:"wifi", tr:"wifi"},
+        {pl:"do zobaczenia wkrótce", tr:"à bientôt"},
+        {pl:"w domu", tr:"à la maison"},
+        {pl:"od (zaczynając od)", tr:"à partir de"},
+        {pl:"rowerem", tr:"à vélo"},
+        {pl:"wiek", tr:"âge"},
+        {pl:"szalik", tr:"écharpe"},
+        {pl:"porażka", tr:"échec"},
+        {pl:"nie udać się", tr:"échouer"},
+        {pl:"oblać, nie zdać", tr:"échouer"},
+        {pl:"szkoła", tr:"école"},
+        {pl:"ekologia", tr:"écologie"},
+        {pl:"słuchać", tr:"écouter"},
+        {pl:"ekran", tr:"écran"},
+        {pl:"pisać", tr:"écrire"},
+        {pl:"kościół", tr:"église"},
+        {pl:"prąd", tr:"électricité"},
+        {pl:"uczeń", tr:"élève"},
+        {pl:"elegancki", tr:"élégant"},
+        {pl:"emocja", tr:"émotion"},
+        {pl:"energia", tr:"énergie"},
+        {pl:"pikantny", tr:"épicé"},
+        {pl:"równowaga", tr:"équilibre"},
+        {pl:"piętro", tr:"étage"},
+        {pl:"student", tr:"étudiant"},
+        {pl:"studiować", tr:"étudier"},
+        {pl:"uczyć się, studiować", tr:"étudier"},
+        {pl:"lato", tr:"été"},
+        {pl:"wydarzenie", tr:"événement"},
+        {pl:"być", tr:"être"},
+        {pl:"oko", tr:"œil"}
+    ],
+    cn: [
+        {pl:"dom", chars:"房子", pinyin:"fángzi"},
+        {pl:"kot", chars:"猫", pinyin:"māo"},
+        {pl:"woda", chars:"水", pinyin:"shuǐ"},
+        {pl:"kl. do ludzi", chars:"个", pinyin:"ge"},
+        {pl:"pani/pan", chars:"您", pinyin:"nín"},
+        {pl:"pytanie", chars:"问题", pinyin:"wèntí"},
+        {pl:"mieć", chars:"有", pinyin:"yǒu"},
+        {pl:"nie mieć", chars:"没有", pinyin:"méi yǒu"},
+        {pl:"praca/pracować", chars:"工作", pinyin:"gōngzuò"},
+        {pl:"bardzo", chars:"非常", pinyin:"fēicháng"},
+        {pl:"mężczyzna", chars:"男", pinyin:"nán"},
+        {pl:"całkiem dobrze/OK", chars:"还可以", pinyin:"hái kě yǐ"},
+        {pl:"również", chars:"也", pinyin:"yě"},
+        {pl:"usta/kl. do rodziny", chars:"口", pinyin:"kǒu"},
+        {pl:"lata (mam … lat)", chars:"岁", pinyin:"suì"},
+        {pl:"l.mnoga", chars:"们", pinyin:"men"},
+        {pl:"drzwi", chars:"门", pinyin:"mén"},
+        {pl:"nie ma problemu/sprawy", chars:"没关系", pinyin:"méi guānxi"},
+        {pl:"serce", chars:"心", pinyin:"xīn"},
+        {pl:"książka", chars:"书", pinyin:"shū"},
+        {pl:"uroczy (możliwy do kochania)", chars:"可爱", pinyin:"kě’ài"},
+        {pl:"opisuje własność", chars:"的", pinyin:"de"},
+        {pl:"uczyć się", chars:"学习", pinyin:"xuéxí"},
+        {pl:"uczeń", chars:"学生", pinyin:"xuésheng"},
+        {pl:"chiński", chars:"汉语", pinyin:"Hànyǔ"},
+        {pl:"OK", chars:"好的", pinyin:"hǎo de"},
+        {pl:"serio? (krótsze)", chars:"是吗？", pinyin:"shì ma?"},
+        {pl:"serio? (dłuższe)", chars:"真的吗？", pinyin:"zhēn de ma?"},
+        {pl:"do widzenia", chars:"再见", pinyin:"zàijiàn"},
+        {pl:"pa pa", chars:"拜拜", pinyin:"báibái (bāibāi)"},
+        {pl:"państwo, kraj", chars:"国", pinyin:"guó"},
+        {pl:"środek", chars:"中", pinyin:"zhōng"},
+        {pl:"czy (partykuła pytająca)", chars:"吗", pinyin:"ma"},
+        {pl:"śpiący", chars:"困", pinyin:"kùn"},
+        {pl:"zmęczony", chars:"累", pinyin:"lèi"},
+        {pl:"zajęty", chars:"忙", pinyin:"máng"},
+        {pl:"Chińczyk", chars:"中国人", pinyin:"Zhōngguó rén"},
+        {pl:"Polak", chars:"波兰人", pinyin:"Bōlán rén"},
+        {pl:"być", chars:"是", pinyin:"shì"},
+        {pl:"kochać", chars:"爱", pinyin:"ài"},
+        {pl:"dużo lepiej", chars:"好多了", pinyin:"hǎo duō le"},
+        {pl:"Wielka Brytania", chars:"英国", pinyin:"Yīngguó"},
+        {pl:"mama", chars:"妈妈", pinyin:"māma"},
+        {pl:"tata", chars:"爸爸", pinyin:"bàba"},
+        {pl:"starszy brak", chars:"哥哥", pinyin:"gēge"},
+        {pl:"młodszy brat", chars:"弟弟", pinyin:"dìdi"},
+        {pl:"nazywać się", chars:"叫", pinyin:"jiào"},
+        {pl:"kl. do książek", chars:"本", pinyin:"běn"},
+        {pl:"trudny", chars:"难", pinyin:"nán"},
+        {pl:"pytać", chars:"问", pinyin:"wèn"},
+        {pl:"piękny", chars:"美", pinyin:"měi"},
+        {pl:"USA", chars:"美国", pinyin:"Měiguó"},
+        {pl:"100 mln", chars:"亿", pinyin:"yì"},
+        {pl:"10 tys.", chars:"万", pinyin:"wàn"},
+        {pl:"1 000", chars:"千", pinyin:"qiān"},
+        {pl:"100", chars:"百", pinyin:"bǎi"},
+        {pl:"10", chars:"十", pinyin:"shí"},
+        {pl:"0", chars:"零", pinyin:"líng"},
+        {pl:"1", chars:"一", pinyin:"yī"},
+        {pl:"2", chars:"二", pinyin:"èr"},
+        {pl:"2", chars:"两", pinyin:"liǎng"},
+        {pl:"3", chars:"三", pinyin:"sān"},
+        {pl:"4", chars:"四", pinyin:"sì"},
+        {pl:"5", chars:"五", pinyin:"wǔ"},
+        {pl:"6", chars:"六", pinyin:"liù"},
+        {pl:"7", chars:"七", pinyin:"qī"},
+        {pl:"8", chars:"八", pinyin:"bā"},
+        {pl:"9", chars:"九", pinyin:"jiǔ"},
+        {pl:"Miło cię poznać!", chars:"认识你很高兴！", pinyin:"rènshi nǐ hěn gāoxìng"},
+        {pl:"znać/poznać", chars:"认识", pinyin:"rènshi"},
+        {pl:"a ty?", chars:"你呢？", pinyin:"nǐ ne"},
+        {pl:"sens", chars:"意思", pinyin:"yìsi"},
+        {pl:"koń", chars:"马", pinyin:"mǎ"},
+        {pl:"biały", chars:"白", pinyin:"bái"},
+        {pl:"cześć", chars:"你好", pinyin:"nǐ hǎo"},
+        {pl:"cześć (hi)", chars:"嗨", pinyin:"hāi"},
+        {pl:"ty", chars:"你", pinyin:"nǐ"},
+        {pl:"ono", chars:"它", pinyin:"tā"},
+        {pl:"ona", chars:"她", pinyin:"tā"},
+        {pl:"on", chars:"他", pinyin:"tā"},
+        {pl:"duży", chars:"大", pinyin:"dà"},
+        {pl:"zbyt", chars:"太", pinyin:"tài"},
+        {pl:"rozumieć", chars:"明白", pinyin:"míngbái"},
+        {pl:"ubrania", chars:"衣服", pinyin:"yīfu"},
+        {pl:"jasny", chars:"明", pinyin:"míng"},
+        {pl:"interesujący", chars:"有意思", pinyin:"yǒu yìsi"},
+        {pl:"drewno/materiał drzewny", chars:"木", pinyin:"mù"},
+        {pl:"partykuła liczebnika porządkowego", chars:"第", pinyin:"dì"},
+        {pl:"rozpoznawać kogoś", chars:"认", pinyin:"rèn"},
+        {pl:"wiedzieć", chars:"知道", pinyin:"zhīdào"},
+        {pl:"pomyliłam się", chars:"我错了", pinyin:"wǒ cuò le"},
+        {pl:"nienawidzić", chars:"恨", pinyin:"hèn"},
+        {pl:"lekcja się kończy", chars:"下课", pinyin:"xià kè"},
+        {pl:"Przechodzić (przez coś)", chars:"过", pinyin:"guò"},
+        {pl:"smutny", chars:"难过", pinyin:"nán guò"},
+        {pl:"szczęśliwy", chars:"高兴", pinyin:"gāoxìng"},
+        {pl:"błędne", chars:"错", pinyin:"cuò"},
+        {pl:"lekcja się kończy", chars:"上课", pinyin:"shàng kè"},
+        {pl:"lekcja", chars:"课", pinyin:"kè"},
+        {pl:"ile (powyżej 10)", chars:"多少", pinyin:"duōshao"},
+        {pl:"ile (poniżej 10)", chars:"几", pinyin:"jǐ"},
+        {pl:"mało", chars:"少", pinyin:"shǎo"},
+        {pl:"dużo", chars:"多", pinyin:"duō"},
+        {pl:"btw/swoją drogą", chars:"对了", pinyin:"duì le"},
+        {pl:"dokładnie/poprawnie", chars:"对", pinyin:"duì"},
+        {pl:"przepraszam", chars:"对不起", pinyin:"duìbuqǐ"},
+        {pl:"dobrze", chars:"好", pinyin:"hǎo"},
+        {pl:"pies", chars:"狗", pinyin:"gǒu"},
+        {pl:"mały", chars:"小", pinyin:"xiǎo"},
+        {pl:"rozmiar/wielkość", chars:"大小", pinyin:"dàxiǎo"},
+        {pl:"ja", chars:"我", pinyin:"wǒ"},
+        {pl:"czarny", chars:"黑", pinyin:"hēi"},
+        {pl:"bardzo", chars:"很", pinyin:"hěn"},
+        {pl:"nie (przeczenie)", chars:"不", pinyin:"bù"},
+        {pl:"kobieta", chars:"女", pinyin:"nǚ"},
+        {pl:"bardzo dużo", chars:"很多", pinyin:"hěn duō"},
+        {pl:"nie mało", chars:"不少", pinyin:"bù shǎo"},
+        {pl:"młodsza siostra", chars:"妹妹", pinyin:"mèimei"},
+        {pl:"starsza siostra", chars:"姐姐", pinyin:"jiějie"},
+        {pl:"i/oraz", chars:"和", pinyin:"hé"},
+        {pl:"czas", chars:"时间", pinyin:"shíjiān"},
+        {pl:"czas (również puste)", chars:"空", pinyin:"kōng"},
+        {pl:"rodzice", chars:"父母", pinyin:"fùmǔ"},
+        {pl:"ojciec", chars:"父亲", pinyin:"fùqīn"},
+        {pl:"matka", chars:"母亲", pinyin:"mǔqīn"},
+        {pl:"syn", chars:"儿子", pinyin:"érzi"},
+        {pl:"córka", chars:"女儿", pinyin:"nǚ’ér"},
+        {pl:"wszyscy", chars:"都", pinyin:"dōu"},
+        {pl:"haha", chars:"哈哈", pinyin:"hāhā"},
+        {pl:"Jak się miewasz?", chars:"你怎么样？", pinyin:"nǐ zěnme yàng"},
+        {pl:"końcówka …a (mowa potoczna)", chars:"啊", pinyin:"a"},
+        {pl:"dzisiaj", chars:"今天", pinyin:"jīntiān"},
+        {pl:"jutro", chars:"明天", pinyin:"míngtiān"},
+        {pl:"Do zobaczenia jutro!", chars:"民天见！", pinyin:"míngtiān jiàn!"},
+        {pl:"iść", chars:"去", pinyin:"qù"},
+        {pl:"język obcy", chars:"外语", pinyin:"wàiyǔ"},
+        {pl:"co (w pytaniach)", chars:"什么", pinyin:"shénme"},
+        {pl:"mówić", chars:"说", pinyin:"shuō"},
+        {pl:"potrafić", chars:"会", pinyin:"huì"},
+        {pl:"ja też", chars:"我也", pinyin:"wǒ yě"},
+        {pl:"Arabia", chars:"阿拉伯", pinyin:"Ālābó"},
+        {pl:"Niemcy", chars:"德国", pinyin:"Déguó"},
+        {pl:"Rosja (łatwiejsza wersja)", chars:"俄国", pinyin:"Éguó"},
+        {pl:"Rosja (trudniejsza wersja)", chars:"俄罗斯", pinyin:"Éluósī"},
+        {pl:"Francja", chars:"法国", pinyin:"Fǎguó"},
+        {pl:"język", chars:"语言", pinyin:"yǔyán"},
+        {pl:"Włochy", chars:"意大利", pinyin:"Yìdàlì"},
+        {pl:"kl. do języków (wer. 1)", chars:"种", pinyin:"zhǒng"},
+        {pl:"kl. do języków (wer. 2)", chars:"门", pinyin:"mén"},
+        {pl:"Korea Południowa", chars:"韩国", pinyin:"Hánguó"},
+        {pl:"Korea Północna", chars:"朝鲜", pinyin:"Cháoxiǎn"},
+        {pl:"Japonia", chars:"日本", pinyin:"Rìběn"},
+        {pl:"Hiszpania", chars:"西班牙", pinyin:"Xībānyá"},
+        {pl:"tylko", chars:"只", pinyin:"zhǐ"},
+        {pl:"przyjaciel", chars:"朋友", pinyin:"péngyou"},
+        {pl:"wow", chars:"哇", pinyin:"wā"},
+        {pl:"rodzimy język", chars:"母语", pinyin:"mǔyǔ"},
+        {pl:"native speaker", chars:"母语者", pinyin:"mǔyǔ zhě"},
+        {pl:"trochę", chars:"一点儿", pinyin:"yìdiǎnr"},
+        {pl:"ale", chars:"但是", pinyin:"dànshì"},
+        {pl:"Pekin", chars:"北京", pinyin:"Běijīng"},
+        {pl:"naprawdę", chars:"真的", pinyin:"zhēn de"},
+        {pl:"to", chars:"这", pinyin:"zhè"},
+        {pl:"niezłe/nieźle", chars:"不错", pinyin:"búcuò"},
+        {pl:"bezbłędnie/zgadza się", chars:"没错", pinyin:"méi cuò"},
+        {pl:"masz rację (dobrze mówisz)", chars:"你说得对", pinyin:"nǐ shuō de duì"},
+        {pl:"całkiem/jeszcze", chars:"还", pinyin:"hái"},
+        {pl:"oczywiście", chars:"当然", pinyin:"dāngrán"},
+        {pl:"poczta", chars:"邮局", pinyin:"yóujú"},
+        {pl:"wysyłać (coś fizycznego)", chars:"寄", pinyin:"jì"},
+        {pl:"list", chars:"信", pinyin:"xìn"},
+        {pl:"wysłać (coś abstrakcyjnego)", chars:"发", pinyin:"fā"},
+        {pl:"email", chars:"电子邮件", pinyin:"diànzǐ yóujiàn"},
+        {pl:"SMS", chars:"短信", pinyin:"duǎnxìn"},
+        {pl:"bank", chars:"银行", pinyin:"yínháng"},
+        {pl:"wypłacić", chars:"取", pinyin:"qǔ"},
+        {pl:"pieniądze", chars:"钱", pinyin:"qián"},
+        {pl:"wracać do", chars:"回", pinyin:"huí"},
+        {pl:"szkoła", chars:"学校", pinyin:"xuéxiào"},
+        {pl:"Do zobaczenia!", chars:"回头见！", pinyin:"Huítóu jiàn!"},
+        {pl:"włosy", chars:"头发", pinyin:"tóufa"}
+    ],
+    es: [{pl:"dom", tr:"casa"}, {pl:"kot", tr:"gato"}, {pl:"woda", tr:"agua"}],
+    de: [{pl:"dom", tr:"Haus"}, {pl:"kot", tr:"Katze"}, {pl:"woda", tr:"Wasser"}],
+    en: [{pl:"dom", tr:"house"}, {pl:"kot", tr:"cat"}, {pl:"woda", tr:"water"}]
+};
+
+let words = [];
+let lang = '';
+let current;
+let direction = 'pl-to-lang';
+let cnMode = 'pl-to-cn';
+let theme = 'light';
+let showTrState = false;
+let showPinState = false;
+let showCharsState = false;
+let filterMode = 'all';
+
+function playReveal(el){
+    el.classList.remove('reveal');
+    void el.offsetWidth;
+    el.classList.add('reveal');
+}
+
+function resetAnswerState(){
+    showTrState = false;
+    showPinState = false;
+    showCharsState = false;
+    const ans = document.getElementById('answer');
+    const pin = document.getElementById('answerPinyin');
+    const chars = document.getElementById('answerChars');
+    if(ans) ans.classList.add('hidden');
+    if(pin) pin.classList.add('hidden');
+    if(chars) chars.classList.add('hidden');
+    updateToggleLabels();
+}
+
+function updateToggleLabels(){
+    const trBtn = document.getElementById('showTrBtn');
+    const pinBtn = document.getElementById('showPinyinBtn');
+    const chBtn = document.getElementById('showCharsBtn');
+    if(trBtn) trBtn.textContent = showTrState ? 'Ukryj tłumaczenie' : 'Pokaż tłumaczenie';
+    if(pinBtn) pinBtn.textContent = showPinState ? 'Ukryj pinyin' : 'Pokaż pinyin';
+    if(chBtn) chBtn.textContent = showCharsState ? 'Ukryj 汉字' : 'Pokaż 汉字';
+}
+
+function getLangFlag(selectedLang) {
+    switch (selectedLang) {
+        case 'it': return '🇮🇹';
+        case 'fr': return '🇫🇷';
+        case 'es': return '🇪🇸';
+        case 'de': return '🇩🇪';
+        case 'en': return '🇬🇧';
+        default: return '🏳️';
+    }
+}
+
+function updateDirectionFlags() {
+    const flag = getLangFlag(lang);
+    const toEl = document.getElementById('dirFlagTo');
+    const fromEl = document.getElementById('dirFlagFrom');
+    if(toEl) toEl.textContent = flag;
+    if(fromEl) fromEl.textContent = flag;
+}
+
+function loadWords(selectedLang) {
+    const stored = localStorage.getItem('words_' + selectedLang);
+    words = stored ? JSON.parse(stored) : [...defaultWords[selectedLang]];
+    words = words.map(w => ({ hard: !!w.hard, ...w }));
+}
+
+function saveWords() { localStorage.setItem('words_' + lang, JSON.stringify(words)); }
+
+function applyTheme(selected) {
+    theme = selected;
+    if(theme === 'dark') document.body.setAttribute('data-theme', 'dark');
+    else document.body.removeAttribute('data-theme');
+    const btn = document.getElementById('themeToggle');
+    if(btn) btn.textContent = theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny';
+    localStorage.setItem('theme', theme);
+}
+
+function toggleTheme() {
+    applyTheme(theme === 'dark' ? 'light' : 'dark');
+}
+
+function hideCnButtons() {
+    document.getElementById('showTrBtn').classList.add('hidden');
+    document.getElementById('showCharsBtn').classList.add('hidden');
+    document.getElementById('showPinyinBtn').classList.add('hidden');
+}
+
+function setCnButtons() {
+    hideCnButtons();
+    switch(cnMode){
+        case 'pl-to-cn': document.getElementById('showPinyinBtn').classList.remove('hidden'); document.getElementById('showCharsBtn').classList.remove('hidden'); break;
+        case 'pinyin-to-other': document.getElementById('showCharsBtn').classList.remove('hidden'); document.getElementById('showTrBtn').classList.remove('hidden'); break;
+        case 'chars-to-other': document.getElementById('showPinyinBtn').classList.remove('hidden'); document.getElementById('showTrBtn').classList.remove('hidden'); break;
+    }
+}
+
+function startLearning(selectedLang) {
+    lang = selectedLang;
+    document.body.setAttribute('data-lang', lang);
+    loadWords(lang);
+    document.getElementById('menu').classList.add('hidden');
+    document.getElementById('learning').classList.remove('hidden');
+    hideAddForm();
+    document.getElementById('wordBase').classList.add('hidden');
+    document.getElementById('buttons').classList.remove('hidden');
+    document.getElementById('word').classList.add('hidden');
+    document.getElementById('nextWordBtn').classList.add('hidden');
+    document.getElementById('word').innerHTML = 'Kliknij „Następne słowo”';
+    document.getElementById('counter').innerHTML = '';
+    document.getElementById('counter').classList.add('hidden');
+    document.getElementById('answer').classList.add('hidden');
+    document.getElementById('answerChars').classList.add('hidden');
+    document.getElementById('answerPinyin').classList.add('hidden');
+    const panel = document.getElementById('learnPanel');
+    if(panel) {
+        panel.classList.add('hidden');
+        panel.style.display = 'none';
+    }
+    resetAnswerState();
+    filterMode = 'all';
+    const filterBtn = document.getElementById('filterToggle');
+    if(filterBtn) filterBtn.textContent = 'Widok: Wszystkie';
+    const hardBtn = document.getElementById('markHardBtn');
+    if(hardBtn) hardBtn.classList.remove('hidden');
+    const changeBtn = document.getElementById('changeDirectionBtn');
+    if(changeBtn) changeBtn.classList.add('hidden');
+
+    if(lang==='cn'){
+        hideCnButtons();
+        document.getElementById('cnModeMenu').classList.remove('hidden');
+    } else {
+        hideCnButtons();
+        document.getElementById('showTrBtn').classList.add('hidden');
+        document.getElementById('showCharsBtn').classList.add('hidden');
+        document.getElementById('showPinyinBtn').classList.add('hidden');
+        updateDirectionFlags();
+        document.getElementById('directionMenu').classList.remove('hidden');
+        cnMode='pl-to-cn';
+    }
+}
+
+function setDirection(selectedDirection){
+    direction=selectedDirection;
+    document.getElementById('directionMenu').classList.add('hidden');
+    const panel = document.getElementById('learnPanel');
+    if(panel) {
+        panel.classList.remove('hidden');
+        panel.style.display = '';
+    }
+    document.getElementById('word').classList.remove('hidden');
+    document.getElementById('nextWordBtn').classList.remove('hidden');
+    document.getElementById('showTrBtn').classList.remove('hidden');
+    document.getElementById('showCharsBtn').classList.add('hidden');
+    document.getElementById('showPinyinBtn').classList.add('hidden');
+    resetAnswerState();
+    updateMarkButtons();
+    const changeBtn = document.getElementById('changeDirectionBtn');
+    if(changeBtn) changeBtn.classList.remove('hidden');
+    nextWord();
+}
+function setCnMode(mode){
+    cnMode=mode;
+    document.getElementById('cnModeMenu').classList.add('hidden');
+    setCnButtons();
+    const panel = document.getElementById('learnPanel');
+    if(panel) {
+        panel.classList.remove('hidden');
+        panel.style.display = '';
+    }
+    document.getElementById('word').classList.remove('hidden');
+    document.getElementById('nextWordBtn').classList.remove('hidden');
+    resetAnswerState();
+    updateMarkButtons();
+    const changeBtn = document.getElementById('changeDirectionBtn');
+    if(changeBtn) changeBtn.classList.remove('hidden');
+    nextWord();
+}
+
+function getFilteredWords(){
+    if(filterMode === 'hard') return words.filter(w => w.hard);
+    return words;
+}
+
+function nextWord() {
+    const pool = getFilteredWords();
+    if(pool.length === 0){
+        current = null;
+        document.getElementById('word').innerHTML = 'Brak słówek w tym widoku';
+        document.getElementById('counter').innerHTML = '0 / 0';
+        document.getElementById('counter').classList.remove('hidden');
+        resetAnswerState();
+        updateMarkButtons();
+        return;
+    }
+    current = pool[Math.floor(Math.random()*pool.length)];
+    resetAnswerState();
+    document.getElementById('counter').innerHTML = `Słówko ${pool.indexOf(current)+1} / ${pool.length}`;
+    document.getElementById('counter').classList.remove('hidden');
+    if(lang==='cn'){
+        switch(cnMode){
+            case 'pl-to-cn':
+                document.getElementById('word').innerHTML=current.pl;
+                document.getElementById('word').classList.remove('is-chars');
+                break;
+            case 'pinyin-to-other':
+                document.getElementById('word').innerHTML=current.pinyin;
+                document.getElementById('word').classList.remove('is-chars');
+                break;
+            case 'chars-to-other':
+                document.getElementById('word').innerHTML=current.chars;
+                document.getElementById('word').classList.add('is-chars');
+                break;
+        }
+    } else {
+        document.getElementById('word').innerHTML=(direction==='pl-to-lang')?current.pl:current.tr;
+        document.getElementById('word').classList.remove('is-chars');
+    }
+    updateMarkButtons();
+}
+
+function showAnswer() {
+    const btn = document.getElementById('showTrBtn');
+    showTrState = !showTrState;
+    if(showTrState){
+        const answerEl = document.getElementById('answer');
+        if(lang!=='cn') answerEl.innerHTML=(direction==='pl-to-lang')?current.tr:current.pl;
+        else if(cnMode==='pinyin-to-other'||cnMode==='chars-to-other') answerEl.innerHTML=current.pl;
+        answerEl.classList.remove('hidden');
+        playReveal(answerEl);
+    }
+    else {
+        document.getElementById('answer').classList.add('hidden');
+    }
+    updateToggleLabels();
+}
+
+function showChars(){
+    const charsEl = document.getElementById('answerChars');
+    const btn = document.getElementById('showCharsBtn');
+    showCharsState = !showCharsState;
+    if(showCharsState){
+        if(cnMode==='pl-to-cn'||cnMode==='pinyin-to-other') charsEl.innerHTML=current.chars;
+        else if(cnMode==='chars-to-other') charsEl.innerHTML=current.pl;
+        charsEl.classList.remove('hidden');
+        playReveal(charsEl);
+    } else {
+        charsEl.classList.add('hidden');
+    }
+    updateToggleLabels();
+}
+function showPinyin(){
+    const pinyinEl = document.getElementById('answerPinyin');
+    const btn = document.getElementById('showPinyinBtn');
+    showPinState = !showPinState;
+    if(showPinState){
+        if(cnMode==='pl-to-cn'||cnMode==='chars-to-other') pinyinEl.innerHTML=current.pinyin;
+        else if(cnMode==='pinyin-to-other') pinyinEl.innerHTML=current.pl;
+        pinyinEl.classList.remove('hidden');
+        playReveal(pinyinEl);
+    } else {
+        pinyinEl.classList.add('hidden');
+    }
+    updateToggleLabels();
+}
+
+function setKnown(isKnown){
+    if(!current) return;
+    current.hard = !isKnown;
+    saveWords();
+    updateMarkButtons();
+    if(filterMode === 'hard' && isKnown) nextWord();
+}
+
+function updateMarkButtons(){
+    const knownBtn = document.getElementById('markKnownBtn');
+    const hardBtn = document.getElementById('markHardBtn');
+    if(!knownBtn || !hardBtn) return;
+    knownBtn.classList.remove('active-flag');
+    hardBtn.classList.remove('active-flag');
+    if(!current) return;
+    if(current.hard) hardBtn.classList.add('active-flag');
+    else knownBtn.classList.add('active-flag');
+}
+
+function toggleFilter(){
+    filterMode = filterMode === 'hard' ? 'all' : 'hard';
+    const btn = document.getElementById('filterToggle');
+    if(btn) btn.textContent = filterMode === 'hard' ? 'Widok: Trudne' : 'Widok: Wszystkie';
+    const hardBtn = document.getElementById('markHardBtn');
+    if(hardBtn) {
+        if(filterMode === 'hard') hardBtn.classList.add('hidden');
+        else hardBtn.classList.remove('hidden');
+    }
+    nextWord();
+}
+
+function backToMenu(){
+    document.getElementById('learning').classList.add('hidden');
+    document.getElementById('menu').classList.remove('hidden');
+    document.body.removeAttribute('data-lang');
+    document.getElementById('answerChars').classList.add('hidden');
+    document.getElementById('answerPinyin').classList.add('hidden');
+    document.getElementById('wordBase').classList.add('hidden');
+    hideAddForm();
+    document.getElementById('counter').classList.add('hidden');
+    document.getElementById('directionMenu').classList.add('hidden');
+    document.getElementById('cnModeMenu').classList.add('hidden');
+    hideCnButtons();
+    filterMode = 'all';
+    const filterBtn = document.getElementById('filterToggle');
+    if(filterBtn) filterBtn.textContent = 'Widok: Wszystkie';
+    const hardBtn = document.getElementById('markHardBtn');
+    if(hardBtn) hardBtn.classList.remove('hidden');
+    const changeBtn = document.getElementById('changeDirectionBtn');
+    if(changeBtn) changeBtn.classList.add('hidden');
+}
+
+function changeDirection(){
+    const panel = document.getElementById('learnPanel');
+    if(panel) {
+        panel.classList.add('hidden');
+        panel.style.display = 'none';
+    }
+    resetAnswerState();
+    const changeBtn = document.getElementById('changeDirectionBtn');
+    if(changeBtn) changeBtn.classList.add('hidden');
+    if(lang === 'cn') {
+        document.getElementById('cnModeMenu').classList.remove('hidden');
+        document.getElementById('directionMenu').classList.add('hidden');
+    } else {
+        document.getElementById('directionMenu').classList.remove('hidden');
+        document.getElementById('cnModeMenu').classList.add('hidden');
+    }
+}
+
+function showAddForm(){
+    document.getElementById('addForm').classList.remove('hidden');
+    
+    if(lang==='cn') {
+        document.getElementById('cnFields').classList.remove('hidden'); 
+        document.getElementById('newTr').classList.add('hidden'); // ukryj tłumaczenie
+    } else {
+        document.getElementById('cnFields').classList.add('hidden'); 
+        document.getElementById('newTr').classList.remove('hidden'); // pokaż tłumaczenie
+    }
+}
+
+function hideAddForm(){ 
+    document.getElementById('addForm').classList.add('hidden'); 
+    document.getElementById('newPl').value=''; 
+    document.getElementById('newTr').value=''; 
+    document.getElementById('newCnChars').value=''; 
+    document.getElementById('newCnPinyin').value=''; 
+}
+
+function addWord(){
+    const pl = document.getElementById('newPl').value.trim();
+    if(lang==='cn'){
+        const chars = document.getElementById('newCnChars').value.trim(); 
+        const pinyin = document.getElementById('newCnPinyin').value.trim();
+        if(pl && chars && pinyin){ 
+            words.push({pl,chars,pinyin,hard:false}); 
+            saveWords(); 
+            alert('Słówko dodane! ✅'); 
+            hideAddForm(); 
+            nextWord(); 
+        } else alert('Wypełnij wszystkie pola!'); 
+    } else { 
+        const tr = document.getElementById('newTr').value.trim(); 
+        if(pl && tr){ 
+            words.push({pl,tr,hard:false}); 
+            saveWords(); 
+            alert('Słówko dodane! ✅'); 
+            hideAddForm(); 
+            nextWord(); 
+        } else alert('Wypełnij oba pola!'); 
+    }
+}
+
+// --- Baza słów ---
+function showWordBase() {
+    document.getElementById('wordBase').classList.remove('hidden');
+    const panel = document.getElementById('learnPanel');
+    if(panel) {
+        panel.classList.add('hidden');
+        panel.style.display = 'none';
+    }
+    document.getElementById('buttons').classList.add('hidden');
+    const baseBtn = document.getElementById('wordBaseBtn');
+    if(baseBtn) baseBtn.classList.add('hidden');
+
+    updateWordList();
+}
+
+function hideWordBase() {
+    document.getElementById('wordBase').classList.add('hidden');
+    const panel = document.getElementById('learnPanel');
+    if(panel) {
+        panel.classList.remove('hidden');
+        panel.style.display = '';
+    }
+    document.getElementById('buttons').classList.remove('hidden');
+    const baseBtn = document.getElementById('wordBaseBtn');
+    if(baseBtn) baseBtn.classList.remove('hidden');
+    if(panel) {
+        panel.classList.add('hidden');
+        panel.style.display = 'none';
+    }
+    if(lang === 'cn') document.getElementById('cnModeMenu').classList.remove('hidden');
+    else document.getElementById('directionMenu').classList.remove('hidden');
+}
+
+function updateWordList() {
+    const container = document.getElementById('wordList');
+    container.innerHTML = '';
+
+    words.forEach((w, i) => {
+        let text;
+        if(lang==='cn') text = `${w.pl} - ${w.pinyin} - ${w.chars}`;
+        else text = `${w.pl} - ${w.tr}`;
+        
+        const div = document.createElement('div');
+        div.className = 'word-row';
+        div.innerHTML = `<span>${text}</span>`;
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Usuń';
+        delBtn.className = 'delete-btn';
+        delBtn.onclick = () => {
+            if(confirm('Czy na pewno chcesz usunąć to słówko?')){
+                words.splice(i,1);
+                saveWords();
+                updateWordList();
+            }
+        };
+        div.appendChild(delBtn);
+        container.appendChild(div);
+    });
+}
+
+// Ustaw zapamiętany motyw przy starcie
+applyTheme(localStorage.getItem('theme') === 'dark' ? 'dark' : 'light');
+</script>
+</div>
+</body>
+</html>
